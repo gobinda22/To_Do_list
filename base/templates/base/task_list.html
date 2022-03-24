@@ -1,0 +1,74 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+<div class="header-bar">
+    <div>
+        <h1>Hello {{request.user|title}}</h1>
+        <h3 style="margin:0">You have <i>{{count}}</i> incomplete task{{ count|pluralize:"s"}}</h3>
+    </div>
+    <!--for  login-->
+     {% if request.user.is_authenticated %}
+     <a class="button-logout" href='/logout'>Logout</a>
+     {% else %}
+     <a href="{% url 'login' %}">login</a>
+     {% endif %}
+
+<!-- // -->
+</div>
+
+<div class="container-body">
+
+<!-- For Todo-list create, update, delete -->
+<div class="search">
+<form method="GET" style="display: flex;">
+    <input style="border-radius: 6px; text-decoration: none;  height: 22px;" type="text" name="search-area" value='{{search_input}}'>
+    <input id="add-link" type="submit" value="Search">
+    <a style="text-decoration:None;     margin-left: 230px; font-size: 23px;" href="{% url 'task-create' %}">&#10011;</a>
+</form>
+</div>
+
+
+
+
+<div class="task-item">
+    <h3>Do</h3>
+    <hr>
+    {% if count == 0 %}
+    <h4>No task :)</h4>
+    {% endif %}
+    {% for task in tasks %}
+
+    <div class="task-incomplete">
+        {% if not task.complete %}
+        <span style="padding-right:10px;">{{task.title}}</span>
+                 <a style="padding-right:10px; text-decoration:None" href="{% url 'task' task.id %}"> <i class="fa fa-eye" style="font-size:20px"></i></a>
+                 <a style="padding-right:10px; text-decoration:None" href="{% url 'task-update' task.id %}">&#9998;</a>
+                 <a style="padding-right:10px; text-decoration:None" href="{% url  'task-delete' task.id %}">&#10007;</a>
+        {% endif %}
+    </div>
+
+    {% endfor %}
+
+    <h3>Done</h3>
+    <hr>
+    {% if countcomplete == 0 %}
+    <h4>No task :(</h4>
+    {% endif %}
+    {% for task in tasks %}
+    <div class="task-complete">
+        {% if task.complete %}
+                <span style="padding-right:10px;">{{task.title}}</span>
+                 <a style="padding-right:10px; text-decoration:None" href="{% url 'task' task.id %}"> <i class="fa fa-eye" style="font-size:20px"></i></a>
+                 <a style="padding-right:10px; text-decoration:None" href="{% url 'task-update' task.id %}">&#9998;</a>
+                    <a style="padding-right:10px; text-decoration:None" href="{% url  'task-delete' task.id %}">&#10007;</a></li>
+
+            {% endif %}
+    </div>
+     {% endfor %}
+
+</div>
+
+</div>
+{% endblock content %}
+
+
